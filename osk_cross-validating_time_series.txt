@@ -1,0 +1,19 @@
+## Cross-validating time series
+
+To measure the predictive power of a model, the model should be tested not only on in-sample data but also on out-of-sample data, i.e. cross-validation. In machine learning, popular cross-validation methods are train-test-splits and K-fold. In time series however, data is not independent due to serial correlation, and the aforementioned methods cannot readily be applied.
+
+The train-test-split technique can be altered to time series, by making a split that keeps the order of observations. This is also known as fixed-origin evaluation (Tashman, 2000). For our data, with 140 sequential observations, that means splitting so that the first (e.g. 112) months are used for model development (i.e. training and validation) and the remaining (28) months are used only for testing. A thorough discussion of this and similar techniques can be found in Tashman (2000). 
+
+A widely used, but simple advancement of the fixed-origin evaulation is the rolling-origin-update evaluation (Bergmeir & Benitez 2012). The data is split multiple times at different points. Although the point of the splits varies and the size of the training data thereby varies, the size of the test set always remain the same. That means that some of the most recent data is unused in some of the splits and it therefore also requires a sufficiently long dataset.
+
+The K-fold method is not usable for our data because of the serially correlated nature of time series and the non-stationarity of the unemployment rate. K-folds can however be used for purely autoregressive time series as it has been shown by Bergmeir et al (2018) but since our proposed prediction model is not purely autoregressive this caveat is not relevant.
+
+
+Sources:
+Bergmeir, C., Hyndman, R. J., & Koo, B. (2018). A note on the validity of cross-validation for evaluating autoregressive time series prediction. Computational Statistics & Data Analysis, 120, 70-83 
+
+L.J. Tashman
+Out-of-sample tests of forecasting accuracy: an analysis and review
+International Journal of Forecasting, 16 (4) (2000), pp. 437-450
+
+Bergmeir, C., & Benítez, J. M. (2012). On the use of cross-validation for time series predictor evaluation. Information Sciences, 191, 192-213.
