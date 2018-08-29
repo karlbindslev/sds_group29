@@ -1,0 +1,21 @@
+# Data collection and transformation
+
+We collect data from Statistics Denmark & Google Trends. 
+
+### Statistics Denmark (DST)
+The data of interest is available on www.statistikbanken.dk in Statistics Denmark openly provided statistics "AKU125: Labour Force Status" and "AUS07: Unemployed persons". We pull the data as csv-files from DST's API, using a link constructed through DST's API link console [FOOTNOTE https://api.statbank.dk/console]. The constructed link filters the data of interest:
+
+- unemployment in % of the total labour force.
+- for all months 2007/01 to 2018/06. 
+- both seasonally corrected and non-seasonally corrected unemployment rates.
+- for both ILO-unemployment rate (AKU-arbejdsløshed), Gross Unemployment, Net Unemployment. 
+
+### Google Trends 
+The data from Google Trends consists of time series for each search query keyword. The time interval is set to 2007/01-2018/06 and we only look at Google Trends for searches in Denmark. We enter the keywords on Google Trends [FOOTNOTE https://trends.google.com/] and scrape the associated time series data one by one. The scrape is then performed using GET requests, which returns responses in JSON-format. From the JSON data we extract the data for each keyword and wrangle them into a single combined dataframe. 
+ 
+
+Sources:
+
+29-8-2018 Statistics Denmark, www.statistikbanken.dk/AKU125
+
+29-8-2018 Statistics Denmark, www.statistikbanken.dk/AUS07
