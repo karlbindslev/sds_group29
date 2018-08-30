@@ -1,0 +1,138 @@
+
+
+
+\section{Introduction / Motivation}
+The internet has become an increasingly important source of information in the 21st century. According to the European Commission, Denmark is the frontrunner of digitilisation in Europe. Almost all Danes have at least elementary computer skills and use internet for a wide range of services. For many users, if not most, any usage of the internet starts with Google. Over the past three years, Google was Denmark’s number one search engine, having a market share of 95% [1]. Indeed, Google facilitates people’s access to information and can contribute to their decision making. [ALL CLAIMS MADE HERE NEED SOURCES]
+ 
+This paper has two aims. First, we try to predict the unemployment rate in the Danish labor market one month ahead based on volume of job-related Google searches. Our prediction is only valid for stable periods in the economy, i.e. we do not claim or attempt to predict such shocks as the GFC in 2007. Our hypothesis is that the number of job-related searches is correlated with the number of people who are unemployed, soon-to-be-unemployed or afraid of being laid off soon e.g. during recessions. This link has been proven before in other countries, but not in the Danish context. Our second aim is to test if we can improve the forecasting ability by using machine learning instead of econometrics. 
+  
+
+\section{Literature review}
+This section reviews a few articles which have investigating the same correlation between Google searches and the unemployment rate.
+
+In their paper "Can Google econometrics predict unemployment? Evidence from Spain" from 2018, Marcos Gonzales-Fernandez and Carmen Gonzales-Velasco find a high correlation between Google searches and the unemployment rate in Spain with monthly data from January 2004 to November 2017. In their analysis they compare a baseline model, a simple AR(1) model, with the model with internet search queries about unemployment, and then with a model with lagged search queries about unemployment. Their results show that the model where search queries are included without any lags is in fact a better model for prediction than their baseline of a simple AR(1), since this model will produce the smallest errors in the prediction of unemployment.
+
+Francesco D'Amuri and Juri Marcucci also find a high predicting power on unemployment in the US from Google searches in their article: "The predictive power of Google searches in forecasting US unemployment" from 2017. They use both a long and short sample size for their predictions, the short sample going from 2004.2 to 2014.2 and long sample going from 1997.7 to 2014.2. Overall, the short sample size seems to be a better predictor compared to the baseline of a basic AR(1) model than the long sample. Their results show that the models using Google search queries achieves the best performance when it comes to root mean squared forecast errors (RMSFEs) with an advantage over the baseline, and it actually increases with the forecast horizon (18 pct. improvement one time step ahead). 
+
+In the literature we find a difference in what the different researchers chooses as search keywords on Google when predicting the unemployment rate. \cite{Fernandez2018} chooses only the word "desempleo", the Spanish word for unemployment, since they assume that this word will summarize the search queries about the situation of loosing a job. Next, other words like payment received when unemployed is in Spanish "subsidio por desempleo", so these queries will already be gathered with the word "desempleo".
+
+\cite{Amuri2017} chooses only the word "jobs" for their queries in their article, since they find this word to be the most popular among different job-search-related keywords. Next, they argue that it is the word that is used most widely across job seekers and thereby is less sensitive to the presence of demand and supply shocks specific to subgroups of workers, which could then bias the value of the GI. Finally, the word "jobs" is not only being used by unemployed people but also employed people, and it thereby captures the overall job-search activity.
+
+Like many other articles within the literature, both \cite{Fernandez2018} and \cite{Amuri2017} gather their internet search data from Google Trends which provides the Google search index (GI). An explanation of this index will follow in the data section below. 
+
+
+\section{Data}
+In this section we present the data for both the Danish unemployment rate and the data used for search queries on Google relating to unemployment.
+
+\subsection{Danish data for unemployment}
+There are three different measures for unemployment in Denmark. Gross unemployment, net unemployment and the ILO unemployment rate (AKU arbejdsl\o shedsm\aa let - Arbejdsmarkedsunders\o gelsen). The gross and net rates are register based measures, while the ILO rate is a survey based measure of unemployment. The three measures are published on a monthly basis, and they are generally defined as the unemployed share of the total labour force. 
+
+The register based measures include people aged 16-64, exclude students and pensioners. Furthermore persons who are part-time unemployed are aggregated and converted into full-time unemployed. The gross unemployment includes all whom receive unemployment benefits from the state or an unemployment insurance fund. The net measure is the gross measure net of those in 'activation' (mandatory work activity to keep unemployment benefits, in Danish: 'aktivering').
+
+Finally the ILO unemployment rate follows the International Labour Organization's measurement standards for unemployment and their definition of it: "people completely out of a job and are available and are or has been job seeking.". Figure \ref{Unemp} plots the three measures both seasonal and non-seasonal on a monthly basis for the period 2007M01 to 2018M06 collected from Statistics Denmark. As Figure \ref{Unemp} shows, the level in the three measures seems to differ whereas the development are approximately the same.
+
+\begin{figure}[h!]
+     \caption{Gross-, net- and ILO unemployed, 2007M01 - 2018M06, pct.}
+\label{Unemp}
+\centering
+    \includegraphics [width=1\textwidth] {Figurer/unemp.png} 
+    {\footnotesize{Source: Statistics Denmark}}
+\end{figure}
+
+We use the net unemployment rate in our analysis and prediction. Our reason being, that we expect that people who are "activated", and thereby included in the gross measure, would not spend as much time doing job related searches on Google. Next, we choose to collect non-seasonal adjusted data, even though unemployment data is clearly affected by seasonality. This is due to the fact that we need to be consistent in our data selection and Google Trends are not seasonally adjusted either. In the literature, researchers are divided when deciding whether to use seasonal or non-seasonal adjusted data. \cite{Amuri2017} chooses to work with weakly seasonally adjusted unemployment data whereas \cite{Fernandez2018} uses non-seasonally adjusted data. 
+
+
+########
+
+
+
+\section{Method}
+This section explains how we attempt to predict the unemployment rate using machine learning, and how we measure the performance of our models. We first make a simple persistence model, i.e. a purely autoregressive model to benchmark against. Hereafter a prediction model based on a linear regression is set up and finally we present to non-linear machine learning models. 
+
+
+
+########
+
+\subsection{Regularization}
+A common problem when using machine learning is overfitting of the model. This implies that model includes features that actually fit the training data too well. The result of overfitting is reduced prediction power, since the model, even though suitable for describing the training data, cannot explain the out-of-sample data, e.g. the test data. 
+There exist multiple machine leaning methods that account for overfitting. These are so-called regularization methods, and in this paper we will use two of these, the Least Absolute Shrinkage and Selection Operator (LASSO) and the Ridge regression.
+
+
+
+\subsection{Cross-validating time series}
+To measure the predictive power of a model, the perfomance should be tested not only on in-sample data but also on out-of-sample data, i.e. cross-validation. In machine learning, popular cross-validation methods are train-test-splits and K-fold. In time series however, data is not independent due to serial correlation, and the aforementioned methods cannot readily be applied.
+
+The train-test-split technique can be altered to time series, by making a split that keeps the order of observations. This is also known as fixed-origin evaluation (\cite{Tashman2000}). For our data, with 101 sequential observations, that means splitting so that the first (e.g. 112) months are used for model development (i.e. training and validation) and the remaining (28) months are used only for testing. A thorough discussion of this and similar techniques can be found in the article by \cite{Tashman2000}. 
+
+A widely used, but simple advancement of the fixed-origin evaulation is the rolling-origin-update evaluation (\cite{Bergmeir2012}). The data is split multiple times at different points. Although the point of the splits varies and the size of the training data thereby varies, the size of the test set always remain the same. That means that some of the most recent data is unused in some of the splits and it therefore also requires a sufficiently long dataset.
+
+The K-fold method is not usable for our data because of the serially correlated nature of time series and the non-stationarity of the unemployment rate. K-folds can however be used for purely autoregressive time series as it has been shown by \cite{Bergmeir2018} but since our proposed prediction model is not purely autoregressive this caveat is not relevant.
+
+\section{Results}
+
+In tabel \ref{Results} we present our results from both the linear regression, the AR(1) mode, the Lasso and the Ridge.
+
+\begin{table}[h!]
+\begin{center}
+    \caption{Results from predictions using different models and allowing \\ for different degrees of polynomials} 
+\begin{tabular}{l c c c c c c c c }
+\hline \hline
+ Degrees & \multicolumn{2}{c}{Linear} & \multicolumn{2}{c}{AR(1)} & \multicolumn{2}{c}{Lasso} & \multicolumn{2}{c}{Ridge} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} 
+   & $MSE$ & $RMSE$ & $MSE$ & $RMSE$ & $MSE$ & $RMSE$ & $MSE$ & $RMSE$ \\
+   \hline \\
+  1 & 0,051 & 0,226 & 0,037 & 0,193 & 0,024 & 0,154 & 0,024 & 0,154 \\
+  2 & - & - & - & - & 0,024 & 0,156 & 0,025 & 0,159\\
+  3 & - & - & - & - & 0,027 & 0,166 & 0,031 & 0,175\\
+  4 & - & - & - & - & 0,028 & 0,167 & 0,040 & 0,200\\
+  %5 & - & - & - & - & 0,028 & 0,169 & 0,050 & 0,223\\
+  (...) &  &  &  &  &  &  &  & \\
+  %6 & - & - & - & - & 0,028 & 0,169 & 0,069 & 0,263\\
+  %7 & - & - & - & - & 0,031 & 0,177 & 0,084 & 0,290\\
+  %8 & - & - & - & - & 0,032 & 0,179 & 0,101 & 0,319\\
+  %9 & - & - & - & - & 0,032 & 0,180 & 0,121 & 0,348\\
+  10 & - & - & - & - & 0,033 & 0,180 & 0,119 & 0,345\\
+\hline \hline
+\multicolumn{9}{c}{\footnotesize{Note: Degrees indicates the order of polynomials we allow, when the model fit is made.}} \\
+\multicolumn{9}{c}{\footnotesize{The MSE and RMSE are the mean-squred errors and root-mean-squared errors between }} \\
+\multicolumn{9}{c}{\footnotesize{the prediction of the test sample and the actual values in the test sample.}}
+\label{Results}
+\end{tabular}
+  \end{center}
+  \end{table}
+
+\section{Discussion}
+
+
+
+\subsection{Decision tree learning}
+In this project we have chosen not to use decision tree learning for our model, but as it is often used for Machine Learning, we will briefly explain the idea behind the method and why we chose not to apply it.
+
+The main idea of a decision tree is to break down the data by asking decision based questions to the data. These questions are based on the features of the training set. Of course one should have in mind not to ask to many questions to the data, hence this would result in overfitting the model, i.e. the decision tree gets too deep. After breaking down the data to the best possible fit, the tree learns the series of questions that are asked to the data.
+Decision trees are naturally a good tool for classification data, since it is much easier to ask classifying questions to the data. But we are working with time series data in our project, and therefore we would have to create multiple classifiers from our features, i.e. our GI keywords. This would require more work, and is beyond our time frame for this project.
+
+
+\section{Conclusion}
+
+
+
+
+
+
+
+
+
+
+
+\cleardoublepage
+\bibliography{ref}
+\addcontentsline{toc}{section}{\numberline{}References}
+
+
+
+
+
+
+
+
+\end{document}
