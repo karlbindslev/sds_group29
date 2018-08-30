@@ -1,0 +1,47 @@
+# General theory/
+
+## Linear regression
+- LinReg
+- Ridge
+- Lasso
+
+## Non-linear regressions
+
+### Decision Tree regression
+
+
+The first non-linear algorithm we apply is the Decision Tree. The Decision Tree regression builds a regression based on a tree structure,  which splits the data into two, and again splits each subset into a new split and so forth, until the maximum level of depth is reached. In the case of continuous input a split is a division of a feature by imposing a threshold on the feature values. The command goes: Put all data in which the values of feature X are lower in one branch and the rest of the feature X values into another branch. Repeat the process for each of the two newly created datasets, with the same or another feature, but with another threshold.  
+
+Each split is made according to an algorithm that maximizes the information gain or correspondingly minimizes the impurity of the datasets. Impurity at a given node is measured as the within-node variance i.e. MSE.
+
+At the end of all branches are leaf nodes. Leaves are cannot be split anymore, and thus contains the smallest allowed size of a datasize. 
+
+### Random Forests
+The second non-linear algorithm we apply is Random forests, which are simply ensembles of decision trees. The *greediness* of Decision Trees if not pruned, can result in high variance and overfitting, which can be mitigated by bootstrapping. Bootstrapping in this context means growing many decision trees and then smooth out their differences. A forest of identical trees is avoided by resampling and training each tree on a random subset of features.
+
+
+### Hyperparameters for Decision Trees
+Decision Trees algorithms have many hyperparameters and Random Forests even more. The most important ones are:
+- Max. depth: limits the levels of splits.
+- Max. features: limits the number of features considered before slitting - within a tree.
+- Min. sample leaf: Limits the minimum size of a leaf, i.e. the minimum number of samples. 
+- Min. samples split: Limits the minimum percentage of samples that must be considered in order to split a node. 
+- n_estimators: Limits the number of trees. NB: Only relevant for random forests.
+- bootstrap: A boolean, which allows or denies resampling in the observation samples used for each tree in a Random Forest.
+
+Tuning hyperparameters presents a computational challenge when optimizing many hyperparameters, because optimization in many dimensions create a large numbers of candidate combinations of hyperparameter values. The challenge is further exacerbated if some hyperparameters can take many different values. There are two methods to tune multiple hyperparameters. Grid Search, which looks through each possible combination of candidates. The computationally less demanding RandomizedSearch does in contrast to  GridSearch not try all parameter values - instead it picks and compares only some candidates, each created by sampling from some specified hyperparameter distributions [SOURCE: SCI-KIT documentation]
+
+
+##### Methods
+
+### Random Forests
+The basic process of using a random forest algorithm is similar to other supervised machine learning algorithms. We set up our model 'RandomForestRegressor' and its hyperparameters. The model is then fitted to the training data, and the fitted model is then applied to the test data to obtain predictions. For performance evalution our predictions are compared to the actual test data.
+
+ ### Optimising hyperparameters of random forests. 
+
+We use the python module RandomizedSearchCV to optimize over all the hyperparameters listed. Each candidate in the randomized search  takes a random integer betweem 3-12 for max depth, a random integer for max features between 1-5 and so on for the remaning parameters (min_samples_split: 2-11, min_samples_leaf: 1-6, bootstrap: True/ False and n_estimators: 25,501).   
+
+ 
+
+
+READ MORE https://elitedatascience.com/algorithm-selection
