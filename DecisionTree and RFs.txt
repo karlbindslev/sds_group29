@@ -1,0 +1,37 @@
+﻿# Theory/Methods/Whereever
+
+## Non-linear regressions
+
+### Decision Tree regression
+
+
+The first non-linear algorithm we apply is the Decision Tree. The Decision Tree regression builds a regression based on a tree structure,  which splits the data into two, and again splits each subset into a new split and so forth, until the maximum level of depth is reached. In the case of continuous input a split is a division of a feature by imposing a threshold on the feature values. The command goes: Put all data in which the values of feature X are lower in one branch and the rest of the feature X values into another branch. Repeat the process for each of the two newly created datasets, with the same or another feature, but with another threshold.  
+
+Each split is made according to an algorithm that maximizes the information gain or correspondingly minimizes the impurity of the datasets. Impurity at a given node is measured as the within-node variance i.e. MSE.
+
+At the end of all branches are leaf nodes. Leaves are cannot be split anymore, and thus contains the smallest allowed size of a datasize. 
+
+### Random Forests
+Random forests are ensembles of decision trees. The greediness of the unpruned Decision Trees, which can result in high variance and overfitting, can be mitigated by bootstrapping. Bootstrapping in this context means growing many decision trees and then smooth out their differences. A forest of identical trees is avoided by resampling and training each tree on a random subset of features.
+
+
+### Hyperparameters for Decision Trees
+Decision Trees algorithms many hyperparameters and Random Forests even more. The most important ones are:
+- Max. depth: limits the levels of splits.
+- Max. features: limits the number of features considered before slitting - within a tree.
+- Min. sample leaf: Limits the minimum size of a leaf, i.e. the minimum number of samples. 
+- Min. samples split: Limits the minimum percentage of samples that must be considered in order to split a node. 
+- n_estimators: Limits the number of trees. NB: Only relevant for random forests.
+
+
+############
+
+2. Increasing the Models Speed
+
+The „n_jobs“ hyperparameter tells the engine how many processors it is allowed to use. If it has a value of 1, it can only use one processor. A value of “-1” means that there is no limit.
+
+„random_state“ makes the model’s output replicable. The model will always produce the same results when it has a definite value of random_state and if it has been given the same parameters and the same training data.
+
+Lastly, there is the „oob_score“ (also called oob sampling), which is a random forest cross validation method. In this sampling, about one-third of the data is not used to train the model and can be used to evaluate its performance. These samples are called the out of bag samples. It is very similar to the leave-one-out cross-validation method, but almost no additional computational burden goes along with it.
+
+READ MORE https://elitedatascience.com/algorithm-selection
