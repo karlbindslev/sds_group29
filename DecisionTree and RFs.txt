@@ -16,7 +16,7 @@ Random forests are ensembles of decision trees. The greediness of the unpruned D
 
 
 ### Hyperparameters for Decision Trees
-Decision Trees algorithms many hyperparameters and Random Forests even more. The most important ones are:
+Decision Trees algorithms have many hyperparameters and Random Forests even more. The most important ones are:
 - Max. depth: limits the levels of splits.
 - Max. features: limits the number of features considered before slitting - within a tree.
 - Min. sample leaf: Limits the minimum size of a leaf, i.e. the minimum number of samples. 
